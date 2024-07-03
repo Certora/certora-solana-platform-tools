@@ -1,0 +1,15 @@
+diff --git a/compiler/rustc_codegen_llvm/src/type_.rs b/compiler/rustc_codegen_llvm/src/type_.rs
+index 124fca73d34..5dbe385549d 100644
+--- a/compiler/rustc_codegen_llvm/src/type_.rs
++++ b/compiler/rustc_codegen_llvm/src/type_.rs
+@@ -282,7 +282,9 @@ fn reg_backend_type(&self, ty: &Reg) -> &'ll Type {
+         ty.llvm_type(self)
+     }
+     fn scalar_copy_backend_type(&self, layout: TyAndLayout<'tcx>) -> Option<Self::Type> {
+-        layout.scalar_copy_llvm_type(self)
++        let _layout = layout.scalar_copy_llvm_type(self);
++        // -- AG: disable load/store optimization of memcpy
++        None
+     }
+ }
+ 

@@ -1,0 +1,14 @@
+diff --git a/llvm/lib/Transforms/Scalar/SROA.cpp b/llvm/lib/Transforms/Scalar/SROA.cpp
+index 983a75e1d..651339d2b 100644
+--- a/llvm/lib/Transforms/Scalar/SROA.cpp
++++ b/llvm/lib/Transforms/Scalar/SROA.cpp
+@@ -2039,6 +2039,9 @@ static VectorType *isVectorPromotionViable(Partition &P, const DataLayout &DL) {
+   };
+   // Put load and store types into a set for de-duplication.
+   for (const Slice &S : P) {
++    /* AG: skip this */
++    continue;
++
+     Type *Ty;
+     if (auto *LI = dyn_cast<LoadInst>(S.getUse()->getUser()))
+       Ty = LI->getType();
