@@ -1,9 +1,9 @@
 out_dir := justfile_directory() / 'out'
 
 host_triple := if os() == 'macos' { arch() + "-apple-darwin" 
-	} else if os() == 'linux' { arch()+"-unknown-linux-gnu}" 
-	} else if os() == 'windows' { arch()+"-pc-windows-msvc"
-	} else { arch()+"-unknown-unknown" }
+	} else if os() == 'linux' { arch() + "-unknown-linux-gnu" 
+	} else if os() == 'windows' { arch() + "-pc-windows-msvc"
+	} else { arch() + "-unknown-unknown" }
 
 artifact := if os() == 'macos' { "platform-tools-osx-" + arch() + ".tar.bz2"
 	} else if os() == 'linux' {  "platform-tools-linux-" + arch() + ".tar.bz2"
