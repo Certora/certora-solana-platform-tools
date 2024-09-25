@@ -1,8 +1,18 @@
 diff --git a/llvm/lib/Transforms/Scalar/SROA.cpp b/llvm/lib/Transforms/Scalar/SROA.cpp
-index 983a75e1d..651339d2b 100644
+index 983a75e1d..da5ec0e2b 100644
 --- a/llvm/lib/Transforms/Scalar/SROA.cpp
 +++ b/llvm/lib/Transforms/Scalar/SROA.cpp
-@@ -2039,6 +2039,9 @@ static VectorType *isVectorPromotionViable(Partition &P, const DataLayout &DL) {
+@@ -1066,6 +1066,9 @@ private:
+     if (!IsOffsetKnown)
+       return PI.setAborted(&II);
+ 
++    // AG: Do not split any allocas that are used by memtransfer
++    PI.setAborted(&II);
++
+     // This side of the transfer is completely out-of-bounds, and so we can
+     // nuke the entire transfer. However, we also need to nuke the other side
+     // if already added to our partitions.
+@@ -2039,6 +2042,9 @@ static VectorType *isVectorPromotionViable(Partition &P, const DataLayout &DL) {
    };
    // Put load and store types into a set for de-duplication.
    for (const Slice &S : P) {
