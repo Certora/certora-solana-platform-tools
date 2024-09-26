@@ -57,3 +57,24 @@ To rebuild and redeploy together
 ```bash
 $ just redeploy
 ```
+
+### Installation of executables
+
+1. Create directory `$HOME/platform-tools-certora`
+2. Uncompress using your favourite tool
+   `executables/mac/platform-tools-osx-aarch64.tar.bz2` or
+   `executables/linux/platform-tools-linux-x86_64.tar.bz2` in
+   `$HOME/platform-tools-certora`.
+
+   Verify that `$HOME/platform-tools-certora` contains `llvm` and `rust`:
+   ```shell
+   ls $HOME/platform-tools-certora/
+   llvm       rust       version.md
+   ```
+   *  On macOS, you need to adjust the permissions for the executables and dynamic libraries:
+      ```shell
+      sudo xattr -rd com.apple.quarantine $HOME/platform-tools-certora
+      ```
+3. cd `$HOME/.cache/solana/v1.41`
+4. Backup `platform-tools`: `mv platform-tools platform-tools-backup`
+5. `ln -sf $HOME/platform-tools-certora ./platform-tools`
