@@ -78,3 +78,22 @@ $ just redeploy
 3. cd `$HOME/.cache/solana/v1.41`
 4. Backup `platform-tools`: `mv platform-tools platform-tools-backup`
 5. `ln -sf $HOME/platform-tools-certora ./platform-tools`
+
+#### Known problems
+
+If you get this error:
+
+```
+Finished release [optimized] target(s) in 0.20s
+dyld[83246]: Library not loaded: /opt/local/lib/libz.1.dylib
+  Referenced from: <AB7A9406-4C8E-336E-ABD7-5E95DBE589C1> /Users/gadiauerbach/platform-tools-certora/llvm/bin/llvm-objcopy
+  Reason: tried: '/opt/local/lib/libz.1.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/local/lib/libz.1.dylib' (no such file), '/opt/local/lib/libz.1.dylib' (no such file)
+/Users/gadiauerbach/.local/share/solana/install/releases/1.18.16/solana-release/bin/sdk/sbf/scripts/strip.sh: line 23: 83246 Abort trap: 6           "$sbf_sdk"/dependencies/platform-tools/llvm/bin/llvm-objcopy --strip-all "$so" "$so_stripped"
+error: Recipe `build-sbf` failed on line 12 with exit code 1
+```
+
+Then, type the following command:
+
+```
+cp $HOME/.cache/solana/v1.41/platform-tools-backup/llvm/bin/llvm-objcopy $HOME/.cache/solana/v1.41/platform-tools/llvm/bin/
+```
