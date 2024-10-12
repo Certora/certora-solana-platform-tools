@@ -61,10 +61,14 @@ $ just redeploy
 ### Installation of executables
 
 1. Create directory `$HOME/platform-tools-certora`
-2. Uncompress using your favourite tool
-   `executables/mac/platform-tools-osx-aarch64.tar.bz2` or
-   `executables/linux/platform-tools-linux-x86_64.tar.bz2` in
-   `$HOME/platform-tools-certora`.
+
+2. Go to releases (https://github.com/Certora/certora-solana-platform-tools/releases) and download the right executable for your machine. For instance, for mac you can type:
+
+```
+wget https://github.com/Certora/certora-solana-platform-tools/releases/download/osx-aarch64/platform-tools-osx-aarch64.tar.bz2
+``` 
+
+3. Uncompress using your favourite tool the tar.bz2 file in `$HOME/platform-tools-certora`.
 
    Verify that `$HOME/platform-tools-certora` contains `llvm` and `rust`:
    ```shell
