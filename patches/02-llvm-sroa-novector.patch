@@ -1,3 +1,30 @@
+diff --git a/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp b/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
+index 235f0da86..6b9228d07 100644
+--- a/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
++++ b/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
+@@ -142,6 +142,12 @@ static cl::opt<bool> EnableVectorFCopySignExtendRound(
+     cl::desc(
+         "Enable merging extends and rounds into FCOPYSIGN on vector types"));
+ 
++static cl::opt<bool> EnableLoadCombine(
++    "combiner-load-merging", cl::Hidden, cl::init(true),
++    cl::desc("DAG combine enable merging multiple loads "
++              "into a wider load"));
++
++
+ namespace {
+ 
+   class DAGCombiner {
+@@ -8914,6 +8920,9 @@ SDValue DAGCombiner::MatchLoadCombine(SDNode *N) {
+   assert(N->getOpcode() == ISD::OR &&
+          "Can only match load combining against OR nodes");
+ 
++  if (!EnableLoadCombine) 
++  return SDValue();
++
+   // Handles simple types only
+   EVT VT = N->getValueType(0);
+   if (VT != MVT::i16 && VT != MVT::i32 && VT != MVT::i64)
 diff --git a/llvm/lib/Transforms/Scalar/SROA.cpp b/llvm/lib/Transforms/Scalar/SROA.cpp
 index 983a75e1d..da5ec0e2b 100644
 --- a/llvm/lib/Transforms/Scalar/SROA.cpp
