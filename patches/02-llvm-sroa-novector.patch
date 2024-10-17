@@ -1,5 +1,5 @@
 diff --git a/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp b/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
-index 235f0da86..6b9228d07 100644
+index 235f0da86..13461ffd0 100644
 --- a/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
 +++ b/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
 @@ -142,6 +142,12 @@ static cl::opt<bool> EnableVectorFCopySignExtendRound(
@@ -15,7 +15,17 @@ index 235f0da86..6b9228d07 100644
  namespace {
  
    class DAGCombiner {
-@@ -8914,6 +8920,9 @@ SDValue DAGCombiner::MatchLoadCombine(SDNode *N) {
+@@ -8696,6 +8702,9 @@ static SDValue stripTruncAndExt(SDValue Value) {
+ /// =>
+ ///  *((i32)p) = BSWAP(val);
+ SDValue DAGCombiner::mergeTruncStores(StoreSDNode *N) {
++  if (!EnableStoreMerging)
++  return SDValue();
++
+   // The matching looks for "store (trunc x)" patterns that appear early but are
+   // likely to be replaced by truncating store nodes during combining.
+   // TODO: If there is evidence that running this later would help, this
+@@ -8914,6 +8923,9 @@ SDValue DAGCombiner::MatchLoadCombine(SDNode *N) {
    assert(N->getOpcode() == ISD::OR &&
           "Can only match load combining against OR nodes");
  
