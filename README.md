@@ -81,10 +81,11 @@ wget https://github.com/Certora/certora-solana-platform-tools/releases/download/
       sudo xattr -rd com.apple.quarantine $HOME/platform-tools-certora
       ```
 3. cd `$HOME/.cache/solana/v1.41`
+
    If this directory does not exist then you need to install first Solana platform-tools.
 
    ```
-   cd $HOME.local/share/solana/install/active_release/bin/sdk/sbf
+   cd $HOME/.local/share/solana/install/active_release/bin/sdk/sbf
    source env.sh
    ```
 
