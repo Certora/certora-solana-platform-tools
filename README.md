@@ -67,6 +67,7 @@ $ just redeploy
 ```
 wget https://github.com/Certora/certora-solana-platform-tools/releases/download/osx-aarch64/platform-tools-osx-aarch64.tar.bz2
 ``` 
+**Please, make sure you download the latest version**.
 
 3. Uncompress using your favourite tool the tar.bz2 file in `$HOME/platform-tools-certora`.
 
@@ -75,13 +76,20 @@ wget https://github.com/Certora/certora-solana-platform-tools/releases/download/
    ls $HOME/platform-tools-certora/
    llvm       rust       version.md
    ```
-   *  On macOS, you need to adjust the permissions for the executables and dynamic libraries:
+   *  On macOS, you might need to adjust the permissions for the executables and dynamic libraries:
       ```shell
       sudo xattr -rd com.apple.quarantine $HOME/platform-tools-certora
       ```
 3. cd `$HOME/.cache/solana/v1.41`
-4. Backup `platform-tools`: `mv platform-tools platform-tools-backup`
-5. `ln -sf $HOME/platform-tools-certora ./platform-tools`
+   If this directory does not exist then you need to install first Solana platform-tools.
+
+   ```
+   cd $HOME.local/share/solana/install/active_release/bin/sdk/sbf
+   source env.sh
+   ```
+
+5. Backup `platform-tools`: `mv platform-tools platform-tools-backup`
+6. `ln -sf $HOME/platform-tools-certora ./platform-tools`
 
 #### Known problems
 
