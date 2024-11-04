@@ -1,0 +1,16 @@
+name: Build Tools
+
+on:
+  push:
+    branches:
+      - oz/ci
+
+jobs:
+  build-mac:
+    runs-on: macos-latest
+    env:
+      TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: just package
