@@ -12,9 +12,11 @@ jobs:
       TAG: ${{ github.ref_name }}
     steps:
       - uses: actions/checkout@v4
-      - name: Install dependencies
-        uses: extractions/setup-just@v1
-        with:
-          just-version: 1.5.0 
+      - name: Install just
+        run: brew install just
+      # - name: Install dependencies
+      #   uses: extractions/setup-just@v1
+      #   with:
+      #     just-version: 1.5.0 
       - name: Build
         run: just package
