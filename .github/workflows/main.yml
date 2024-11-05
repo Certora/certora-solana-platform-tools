@@ -16,3 +16,12 @@ jobs:
         run: brew install just ninja
       - name: Prepare and build
         run: just all
+      - name: Print dir
+        run: |
+          pwd
+          ls -lR
+      - uses: actions/upload-artifact@v4
+        with:
+          name: platform-tools-osx-aarch64.tar.bz2
+          path: /Users/runner/work/certora-solana-platform-tools/certora-solana-platform-tools/out/platform-tools-osx-aarch64.tar.bz2
+
