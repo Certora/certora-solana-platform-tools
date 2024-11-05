@@ -12,9 +12,7 @@ jobs:
       TAG: ${{ github.ref_name }}
     steps:
       - uses: actions/checkout@v4
-      - name: Install just
-        run: brew install just
+      - name: Install dependencies
+        run: brew install just ninja
       - name: Prepare and build
         run: just all
-      # - name: Build
-      #   run: just package
