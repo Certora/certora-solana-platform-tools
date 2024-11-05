@@ -30,7 +30,7 @@ build-cargo:
 	# AG: this fails for me with macport and libiconv
 	# AG: I have to disable libiconv, run this manually
 	# AG: and then re-enable it
-	cd {{ out_dir }}/cargo && env OPENSSL_STATIC=1 cargo build --release
+	cd {{ out_dir }}/cargo && cargo update && env OPENSSL_STATIC=1 cargo build --release
 
 [linux]
 build-cargo:
