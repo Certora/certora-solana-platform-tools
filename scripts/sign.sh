@@ -5,7 +5,7 @@ FILES_TO_SIGN=$@
 
 for FILE_PATH in "$FILES_TO_SIGN"; do
     FILE_NAME=$(basename $FILE_PATH)
-    APPLE_TEMPKEYCHAIN_NAME=$(echo $FILE_NAME | tr -cd 'a-zA-Z')$(($RANDOM))
+    APPLE_TEMPKEYCHAIN_NAME=$(echo $FILE_NAME | tr -cd 'a-zA-Z')$(($RANDOM)) # creating a random name
     
     echo "File path: $FILE_PATH"
     echo "File name: $FILE_NAME"
