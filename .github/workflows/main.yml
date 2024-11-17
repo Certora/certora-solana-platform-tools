@@ -33,3 +33,23 @@ jobs:
         with:
           name: platform-tools-osx-aarch64.tar.bz2
           path: out/platform-tools-osx-aarch64.tar.bz2
+  build-linux:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+      # - name: Install dependencies
+      #   run: apt install git
+      - name: Clone
+        run: just clone
+      - name: Prepare
+        run: just prepare
+      - name: Build rust, cargo and newlib
+        run: just build-all
+      - name: Package
+        run: just package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: platform-tools-linux-x86_64.tar.bz2
+          path: out/platform-tools-linux-x86_64.tar.bz2
