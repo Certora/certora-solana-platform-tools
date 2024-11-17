@@ -39,8 +39,8 @@ jobs:
       TAG: ${{ github.ref_name }}
     steps:
       - uses: actions/checkout@v4
-      # - name: Install dependencies
-      #   run: apt install git
+      - name: Install dependencies
+        run: apt install just
       - name: Clone
         run: just clone
       - name: Prepare
