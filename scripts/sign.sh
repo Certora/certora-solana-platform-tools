@@ -3,7 +3,7 @@ set -ex
 
 FILES_TO_SIGN=$@
 
-for FILE_PATH in "$FILES_TO_SIGN"; do
+for FILE_PATH in $FILES_TO_SIGN; do
     FILE_NAME=$(basename $FILE_PATH)
     APPLE_TEMPKEYCHAIN_NAME=$(echo $FILE_NAME | tr -cd 'a-zA-Z')$(($RANDOM)) # use a random name
     
