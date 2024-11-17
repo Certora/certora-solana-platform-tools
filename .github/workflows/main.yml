@@ -8,7 +8,6 @@ on:
 jobs:
   build-mac:
     runs-on: macos-latest
-    # needs: build-linux # TODO: remove this
     env:
       TAG: ${{ github.ref_name }}
     steps:
@@ -37,7 +36,6 @@ jobs:
 
   build-linux:
     runs-on: ubuntu-latest
-    needs: build-mac # TODO: remove this
     env:
       TAG: ${{ github.ref_name }}
     steps:
