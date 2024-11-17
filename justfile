@@ -34,7 +34,7 @@ build-cargo:
 
 [linux]
 build-cargo:
-	cd {{ out_dir }}/cargo && env OPENSSL_STATIC=1 OPENSSL_LIB_DIR=/usr/lib/x86_64-linux-gnu OPENSSL_INCLUDE_DIR=/usr/include/openssl cargo build --release
+	cd {{ out_dir }}/cargo && cargo update && env OPENSSL_STATIC=1 OPENSSL_LIB_DIR=/usr/lib/x86_64-linux-gnu OPENSSL_INCLUDE_DIR=/usr/include/openssl cargo build --release
 
 
 [linux,macos]
