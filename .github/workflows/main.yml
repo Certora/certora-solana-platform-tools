@@ -3,11 +3,12 @@ name: Build Tools
 on:
   push:
     branches:
-      - oz/ci
+      - oz/ci # TODO: change this
 
 jobs:
   build-mac:
     runs-on: macos-latest
+    needs: build-linux # TODO: remove this
     env:
       TAG: ${{ github.ref_name }}
     steps:
@@ -33,6 +34,7 @@ jobs:
         with:
           name: platform-tools-osx-aarch64.tar.bz2
           path: out/platform-tools-osx-aarch64.tar.bz2
+
   build-linux:
     runs-on: ubuntu-latest
     env:
