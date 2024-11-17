@@ -82,6 +82,20 @@ if [[ "${HOST_TRIPLE}" != "x86_64-pc-windows-msvc" ]] ; then
     #cp -R rust/build/${HOST_TRIPLE}/llvm/lib/python* deploy/llvm/lib/
 fi
 
+if [[ $HOST_TRIPLE == *apple-darwin* ]]; then
+    pwd; ls -l # TODO: remove this
+    
+    RUST_BIN="./deploy/rust/bin"
+    LLVM_BIN="./deploy/llvm/bin"
+
+    ./sign.sh "$RUST_BIN/rustc" \
+        "$RUST_BIN/rustdoc" \
+        "$RUST_BIN/cargo" \
+        "$LLVM_BIN/llvm-objdump" \
+        "$LLVM_BIN/llvm-ar" \
+        "$LLVM_BIN/llvm-readobj" \
+        "$LLVM_BIN/llvm-objcopy"
+
 # Check the Rust binaries
 while IFS= read -r f
 do
