@@ -43,6 +43,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install just
         uses: taiki-e/install-action@just
+      - name: Install ninja
+        run: sudo apt update; sudo apt install ninja-build
       - name: Clone
         run: just clone
       - name: Prepare
