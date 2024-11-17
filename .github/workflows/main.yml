@@ -41,8 +41,8 @@ jobs:
       TAG: ${{ github.ref_name }}
     steps:
       - uses: actions/checkout@v4
-      - name: Install dependencies
-        run: sudo apt update; sudo apt install just
+      - name: Install just
+        uses: taiki-e/install-action@just
       - name: Clone
         run: just clone
       - name: Prepare
