@@ -82,6 +82,7 @@ if [[ "${HOST_TRIPLE}" != "x86_64-pc-windows-msvc" ]] ; then
     #cp -R rust/build/${HOST_TRIPLE}/llvm/lib/python* deploy/llvm/lib/
 fi
 
+# Sign macOS binaries
 if [[ $HOST_TRIPLE == *apple-darwin* ]]; then
     pwd; ls -l # TODO: remove this
     
