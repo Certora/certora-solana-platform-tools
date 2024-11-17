@@ -89,7 +89,7 @@ if [[ $HOST_TRIPLE == *apple-darwin* ]]; then
     RUST_BIN="./deploy/rust/bin"
     LLVM_BIN="./deploy/llvm/bin"
 
-    ./scripts/sign.sh "$RUST_BIN/rustc" \
+    ../scripts/sign.sh "$RUST_BIN/rustc" \
         "$RUST_BIN/rustdoc" \
         "$RUST_BIN/cargo" \
         "$LLVM_BIN/llvm-objdump" \
