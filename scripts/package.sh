@@ -84,8 +84,6 @@ fi
 
 # Sign macOS binaries
 if [[ $HOST_TRIPLE == *apple-darwin* ]]; then
-    pwd; ls -l # TODO: remove this
-    
     LLVM_BIN="./deploy/llvm/bin"
     RUST_BIN="./deploy/rust/bin"
     RUST_LIB="./deploy/rust/lib"
