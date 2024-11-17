@@ -96,6 +96,7 @@ if [[ $HOST_TRIPLE == *apple-darwin* ]]; then
         "$LLVM_BIN/llvm-ar" \
         "$LLVM_BIN/llvm-readobj" \
         "$LLVM_BIN/llvm-objcopy"
+fi
 
 # Check the Rust binaries
 while IFS= read -r f
