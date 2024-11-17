@@ -42,7 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install dependencies
-        run: sudo apt install just
+        run: sudo apt update; sudo apt install just
       - name: Clone
         run: just clone
       - name: Prepare
