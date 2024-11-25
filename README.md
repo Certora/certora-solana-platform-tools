@@ -78,7 +78,8 @@ wget https://github.com/Certora/certora-solana-platform-tools/releases/download/
    ```
    *  On macOS, you might need to adjust the permissions for the executables and dynamic libraries:
       ```shell
-      sudo xattr -rd com.apple.quarantine $HOME/platform-tools-certora
+      find . -type f |while read -r file; do [ -x $file ] && sudo xattr -d com.apple.quarantine $file; done
+      find . -name '*.so' |while read -r file; do sudo xattr -d com.apple.quarantine $file; done
       ```
 3. cd `$HOME/.cache/solana/v1.41`
 
