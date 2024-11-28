@@ -83,23 +83,24 @@ if [[ "${HOST_TRIPLE}" != "x86_64-pc-windows-msvc" ]] ; then
 fi
 
 # Sign macOS binaries
-# if [[ $HOST_TRIPLE == *apple-darwin* ]]; then
-#     LLVM_BIN="./deploy/llvm/bin"
-#     RUST_BIN="./deploy/rust/bin"
-#     RUST_LIB="./deploy/rust/lib"
+if [[ $HOST_TRIPLE == *apple-darwin* ]]; then
+    LLVM_BIN="./deploy/llvm/bin"
+    RUST_BIN="./deploy/rust/bin"
+    RUST_LIB="./deploy/rust/lib"
+    RUST_LIB_BIN="$RUST_LIB/rustlib/aarch64-apple-darwin/bin"
 
-#     ../scripts/sign.sh \
-#         "$LLVM_BIN/llvm-objdump" \
-#         "$LLVM_BIN/llvm-ar" \
-#         "$LLVM_BIN/llvm-readobj" \
-#         "$LLVM_BIN/llvm-objcopy" \
-#         "$RUST_BIN/rustc" \
-#         "$RUST_BIN/rustdoc" \
-#         "$RUST_BIN/cargo" \
-#         "$RUST_LIB/librustc_driver-b4e91886a4c059a0.dylib" \
-#         "$RUST_LIB/libstd-6eff127b55c063c2.dylib" \
-#         "$RUST_LIB/libtest-090d77c63b6e9f11.dylib"\
-# fi
+    ../scripts/sign.sh \
+        "$LLVM_BIN/llvm-objdump" \
+        "$LLVM_BIN/llvm-ar" \
+        "$LLVM_BIN/llvm-readobj" \
+        "$LLVM_BIN/llvm-objcopy" \
+        "$RUST_BIN/rustc" \
+        "$RUST_BIN/rustdoc" \
+        "$RUST_BIN/cargo" \
+        "$RUST_LIB/librustc_driver-b4e91886a4c059a0.dylib" \
+        "$RUST_LIB/libstd-6eff127b55c063c2.dylib" \
+        "$RUST_LIB_BIN/rust-lld"
+fi
 
 # Check the Rust binaries
 while IFS= read -r f
