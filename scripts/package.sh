@@ -98,7 +98,7 @@ if [[ $HOST_TRIPLE == *apple-darwin* ]]; then
         "$RUST_BIN/cargo" \
         "$RUST_LIB/librustc_driver-b4e91886a4c059a0.dylib" \
         "$RUST_LIB/libstd-6eff127b55c063c2.dylib" \
-        "$RUST_LIB_BIN/rustd-lld"
+        "$RUST_LIB_BIN/rust-lld"
        # "$RUST_BIN/rustc" # Not signing 'rustc' duo to failing cargo build
 fi
 
