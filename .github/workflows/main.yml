@@ -3,7 +3,6 @@ name: Build Tools
 on:
   push:
     branches:
-      - oz/ci # TODO: remove this
       - main
     tags: ['*']
   workflow_dispatch:
