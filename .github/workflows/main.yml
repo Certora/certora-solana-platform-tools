@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - oz/ci
     tags: ['*']
   workflow_dispatch:
 
@@ -15,7 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install dependencies
-        run: brew install just ninja
+        run: |
+            brew install just ninja
+            rustup install 1.75.0
       - name: Clone
         run: just clone
       - name: Prepare
@@ -44,8 +47,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install just
         uses: taiki-e/install-action@just
-      - name: Install ninja
-        run: sudo apt update; sudo apt install ninja-build
+      - name: Install dependencies
+        run: |
+          sudo apt update; sudo apt install ninja-build
+          rustup install 1.75.0
       - name: Clone
         run: just clone
       - name: Prepare
