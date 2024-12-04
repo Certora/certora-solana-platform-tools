@@ -19,6 +19,7 @@ jobs:
         run: |
             brew install just ninja
             rustup install 1.75.0
+            rustup toolchain install 1.75.0
       - name: Clone
         run: just clone
       - name: Prepare
@@ -49,6 +50,7 @@ jobs:
         run: |
             brew install just ninja
             rustup install 1.75.0
+            rustup toolchain install 1.75.0
       - name: Clone
         run: just clone
       - name: Prepare
@@ -81,6 +83,7 @@ jobs:
         run: |
           sudo apt update; sudo apt install ninja-build
           rustup install 1.75.0
+          rustup toolchain install 1.75.0
       - name: Clone
         run: just clone
       - name: Prepare
