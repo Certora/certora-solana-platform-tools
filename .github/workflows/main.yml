@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-mac:
+  build-mac-arm:
     runs-on: macos-latest
     env:
       TAG: ${{ github.ref_name }}
@@ -38,6 +38,36 @@ jobs:
         with:
           name: platform-tools-osx-aarch64.tar.bz2
           path: out/platform-tools-osx-aarch64.tar.bz2
+
+  build-mac-intel:
+    runs-on: macos-latest-large
+    env:
+      TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+            brew install just ninja
+            rustup install 1.75.0
+      - name: Clone
+        run: just clone
+      - name: Prepare
+        run: just prepare
+      - name: Build rust, cargo and newlib
+        run: just build-all
+      - name: Package
+        env:
+          APPLE_CODESIGN_IDENTITY: ${{ secrets.APPLE_CODESIGN_IDENTITY }}
+          APPLE_CRED: ${{ secrets.APPLE_CRED }}
+          APPLE_P12_BASE64: ${{ secrets.APPLE_P12_BASE64 }}
+          APPLE_P12_PASSWORD: ${{ secrets.APPLE_P12_PASSWORD }}
+          APPLE_TEAMID: ${{ secrets.APPLE_TEAMID }}
+          APPLE_TEMPKEYCHAIN_PASSWORD: ${{ secrets.APPLE_TEMPKEYCHAIN_PASSWORD }}
+        run: just package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: platform-tools-osx-x86_64.tar.bz2
+          path: out/platform-tools-osx-x86_64.tar.bz2
 
   build-linux:
     runs-on: ubuntu-latest
