@@ -42,7 +42,7 @@ jobs:
           path: out/platform-tools-osx-aarch64.tar.bz2
 
   build-mac-intel:
-    runs-on: macos-latest-large
+    runs-on: macos-13
     env:
       TAG: ${{ github.ref_name }}
     steps:
