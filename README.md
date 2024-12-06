@@ -44,6 +44,10 @@ BUILD CARGO MANUALLY'
 $ sudo port activate libiconv
 ```
 
+There is a known problem with LLVM >17 cannot build LLVM17. Use LLVM17 to build.
+Note that rust calls system `cc` compiler instead of specificly provided compiler.
+Make sure that `cc` resolves to `clang17`.
+
 ### Rebuild
 
 To rebuild after a change in LLVM and/or Rust
