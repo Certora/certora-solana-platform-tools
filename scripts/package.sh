@@ -71,6 +71,9 @@ llvm-objcopy
 llvm-objdump
 llvm-readelf
 llvm-readobj
+llvm-addr2line
+llvm-symbolizer
+opt
 EOF
          )
 cp -R "rust/build/${HOST_TRIPLE}/llvm/build/lib/clang" deploy/llvm/lib/
