@@ -1,0 +1,126 @@
+name: Build Tools
+
+on:
+  push:
+    branches:
+      - main
+      - oz/ci
+    tags: ['*']
+  workflow_dispatch:
+
+jobs:
+  build-mac-arm:
+    runs-on: macos-latest
+    env:
+      TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+            brew install just ninja
+            rustup install 1.75
+            rustup toolchain install 1.75
+            rustup default 1.75-aarch64-apple-darwin
+      - name: Clone
+        run: just clone
+      - name: Prepare
+        run: just prepare
+      - name: Build rust, cargo and newlib
+        run: just build-all
+      - name: Package
+        env:
+          APPLE_CODESIGN_IDENTITY: ${{ secrets.APPLE_CODESIGN_IDENTITY }}
+          APPLE_CRED: ${{ secrets.APPLE_CRED }}
+          APPLE_P12_BASE64: ${{ secrets.APPLE_P12_BASE64 }}
+          APPLE_P12_PASSWORD: ${{ secrets.APPLE_P12_PASSWORD }}
+          APPLE_TEAMID: ${{ secrets.APPLE_TEAMID }}
+          APPLE_TEMPKEYCHAIN_PASSWORD: ${{ secrets.APPLE_TEMPKEYCHAIN_PASSWORD }}
+        run: just package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: platform-tools-osx-aarch64.tar.bz2
+          path: out/platform-tools-osx-aarch64.tar.bz2
+
+  build-mac-intel:
+    runs-on: macos-13
+    env:
+      TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+            brew install just ninja
+            rustup install 1.75
+            rustup toolchain install 1.75
+            rustup default 1.75-x86_64-apple-darwin
+      - name: Clone
+        run: just clone
+      - name: Prepare
+        run: just prepare
+      - name: Build rust, cargo and newlib
+        run: just build-all
+      - name: Package
+        env:
+          APPLE_CODESIGN_IDENTITY: ${{ secrets.APPLE_CODESIGN_IDENTITY }}
+          APPLE_CRED: ${{ secrets.APPLE_CRED }}
+          APPLE_P12_BASE64: ${{ secrets.APPLE_P12_BASE64 }}
+          APPLE_P12_PASSWORD: ${{ secrets.APPLE_P12_PASSWORD }}
+          APPLE_TEAMID: ${{ secrets.APPLE_TEAMID }}
+          APPLE_TEMPKEYCHAIN_PASSWORD: ${{ secrets.APPLE_TEMPKEYCHAIN_PASSWORD }}
+        run: just package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: platform-tools-osx-x86_64.tar.bz2
+          path: out/platform-tools-osx-x86_64.tar.bz2
+
+  build-linux:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install just
+        uses: taiki-e/install-action@just
+      - name: Install dependencies
+        run: |
+          sudo apt update; sudo apt install ninja-build
+          rustup install 1.75
+          rustup toolchain install 1.75
+          rustup default 1.75-x86_64-unknown-linux-gnu
+      - name: Clone
+        run: just clone
+      - name: Prepare
+        run: just prepare
+      - name: Build rust, cargo and newlib
+        run: just build-all
+      - name: Package
+        run: just package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: platform-tools-linux-x86_64.tar.bz2
+          path: out/platform-tools-linux-x86_64.tar.bz2
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [build-linux, build-mac-arm, build-mac-intel]
+    if: startsWith(github.event.ref, 'refs/tags/') #  only on new tag creation
+    env:
+      TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+      - name: Create a release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          release_exist=$(gh release view $TAG 2>&1 || exit 0)
+          if [ "$release_exist" = "release not found" ]; then
+            gh release create $TAG platform-tools-osx-aarch64.tar.bz2/platform-tools-osx-aarch64.tar.bz2 --title "Release $TAG" --generate-notes --latest
+            gh release upload $TAG platform-tools-osx-x86_64.tar.bz2/platform-tools-osx-x86_64.tar.bz2
+            gh release upload $TAG platform-tools-linux-x86_64.tar.bz2/platform-tools-linux-x86_64.tar.bz2
+          else
+            gh release upload $TAG platform-tools-osx-aarch64.tar.bz2/platform-tools-osx-aarch64.tar.bz2
+            gh release upload $TAG platform-tools-osx-x86_64.tar.bz2/platform-tools-osx-x86_64.tar.bz2
+            gh release upload $TAG platform-tools-linux-x86_64.tar.bz2/platform-tools-linux-x86_64.tar.bz2
+          fi
