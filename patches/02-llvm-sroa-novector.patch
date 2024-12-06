@@ -36,20 +36,33 @@ index 235f0da86..13461ffd0 100644
    EVT VT = N->getValueType(0);
    if (VT != MVT::i16 && VT != MVT::i32 && VT != MVT::i64)
 diff --git a/llvm/lib/Transforms/Scalar/SROA.cpp b/llvm/lib/Transforms/Scalar/SROA.cpp
-index 983a75e1d..da5ec0e2b 100644
+index 983a75e1d..0e5cff400 100644
 --- a/llvm/lib/Transforms/Scalar/SROA.cpp
 +++ b/llvm/lib/Transforms/Scalar/SROA.cpp
-@@ -1066,6 +1066,9 @@ private:
+@@ -121,6 +121,10 @@ static cl::opt<bool> SROAStrictInbounds("sroa-strict-inbounds", cl::init(false),
+ /// Disable running mem2reg during SROA in order to test or debug SROA.
+ static cl::opt<bool> SROASkipMem2Reg("sroa-skip-mem2reg", cl::init(false),
+                                      cl::Hidden);
++
++static cl::opt<uint64_t> MaxMemcpySplit("sroa-max-memcpy-split",
++                                        cl::Hidden,
++                                        cl::init(std::numeric_limits<uint64_t>::max()));
+ namespace {
+ 
+ /// Calculate the fragment of a variable to use when slicing a store
+@@ -1066,6 +1070,11 @@ private:
      if (!IsOffsetKnown)
        return PI.setAborted(&II);
  
-+    // AG: Do not split any allocas that are used by memtransfer
-+    PI.setAborted(&II);
++    if (AllocSize > MaxMemcpySplit) {
++        // CERTORA: Do not split any allocas that are used by memtransfer unless they are small
++        PI.setAborted(&II);
++    }
 +
      // This side of the transfer is completely out-of-bounds, and so we can
      // nuke the entire transfer. However, we also need to nuke the other side
      // if already added to our partitions.
-@@ -2039,6 +2042,9 @@ static VectorType *isVectorPromotionViable(Partition &P, const DataLayout &DL) {
+@@ -2039,6 +2048,9 @@ static VectorType *isVectorPromotionViable(Partition &P, const DataLayout &DL) {
    };
    // Put load and store types into a set for de-duplication.
    for (const Slice &S : P) {
