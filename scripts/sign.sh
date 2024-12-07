@@ -22,7 +22,7 @@ for FILE_PATH in $FILES_TO_SIGN; do
     security unlock-keychain -p "$APPLE_TEMPKEYCHAIN_PASSWORD" "$APPLE_TEMPKEYCHAIN_NAME"
 
     # sign the binary
-    codesign -o runtime --force --timestamp -s "$APPLE_CODESIGN_IDENTITY" -v $FILE_PATH
+    codesign -o runtime --force --timestamp --entitlements ./scripts/hardened_runtime_entitlements.plist -s "$APPLE_CODESIGN_IDENTITY" -v $FILE_PATH
 
     # notarize binary
     ditto -c -k $FILE_PATH $FILE_NAME.zip # notarization require zip files
