@@ -85,12 +85,12 @@ if [[ "${HOST_TRIPLE}" != "x86_64-pc-windows-msvc" ]] ; then
     #cp -R rust/build/${HOST_TRIPLE}/llvm/lib/python* deploy/llvm/lib/
 fi
 
-# Sign macOS binaries - Disabled
+# Sign macOS binaries
 if [[ $HOST_TRIPLE == *apple-darwin* ]] && [[ ! -z "$APPLE_CODESIGN_IDENTITY" ]]; then
     LLVM_BIN="./deploy/llvm/bin"
     while IFS= read -r f
     do
-        bin_file="${LLVM_BIN}${f}${EXE_SUFFIX}"
+        bin_file="${LLVM_BIN}/${f}${EXE_SUFFIX}"
         if [[ -f "$bin_file" ]] ; then
             ../scripts/sign.sh "$bin_file"
         fi
@@ -114,7 +114,7 @@ EOF
     RUST_BIN="./deploy/rust/bin"
     while IFS= read -r f
     do
-        bin_file="${RUST_BIN}${f}${EXE_SUFFIX}"
+        bin_file="${RUST_BIN}/${f}${EXE_SUFFIX}"
         if [[ -f "$bin_file" ]] ; then
             ../scripts/sign.sh "$bin_file"
         fi
@@ -125,10 +125,10 @@ rustc
 EOF
         )
 
-    RUST_LIB_BIN="$RUST_LIB/rustlib/aarch64-apple-darwin/bin"
+    RUST_LIB_BIN="$RUST_LIB/rustlib/$HOST_TRIPLE/bin"
     while IFS= read -r f
     do
-        bin_file="${RUST_BIN}${f}${EXE_SUFFIX}"
+        bin_file="${RUST_BIN}/${f}${EXE_SUFFIX}"
         if [[ -f "$bin_file" ]] ; then
             ../scripts/sign.sh "$bin_file"
         fi
@@ -155,7 +155,7 @@ EOF
 
     # sign all dylib libraries
     RUST_LIB="./deploy/rust/lib"
-    RUST_LIB_LIB="$RUST_LIB/rustlib/aarch64-apple-darwin/lib"
+    RUST_LIB_LIB="$RUST_LIB/rustlib/$HOST_TRIPLE/lib"
     ../scripts/sign.sh $RUST_LIB/*.dylib $RUST_LIB_LIB/*.dylib
 fi
 
