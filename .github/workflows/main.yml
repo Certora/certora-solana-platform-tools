@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - oz/ci
     tags: ['*']
   workflow_dispatch:
 
