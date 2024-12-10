@@ -85,79 +85,79 @@ if [[ "${HOST_TRIPLE}" != "x86_64-pc-windows-msvc" ]] ; then
     #cp -R rust/build/${HOST_TRIPLE}/llvm/lib/python* deploy/llvm/lib/
 fi
 
-# Sign macOS binaries
-if [[ $HOST_TRIPLE == *apple-darwin* ]] && [[ ! -z "$APPLE_CODESIGN_IDENTITY" ]]; then
-    LLVM_BIN="./deploy/llvm/bin"
-    while IFS= read -r f
-    do
-        bin_file="${LLVM_BIN}/${f}${EXE_SUFFIX}"
-        if [[ -f "$bin_file" ]] ; then
-            ../scripts/sign.sh "$bin_file"
-        fi
-    done < <(cat <<EOF
-lld
-llc
-llvm-symbolizer
-llvm-objdump
-lldb
-llvm-ar
-llvm-readobj
-opt
-llvm-objcopy
-clang-17
-solana-lldb
-lldb-vscode
-liblldb.17.0.6-rust-dev.dylib
-EOF
-        )
+# Sign macOS binaries - Disabled
+# if [[ $HOST_TRIPLE == *apple-darwin* ]] && [[ ! -z "$APPLE_CODESIGN_IDENTITY" ]]; then
+#     LLVM_BIN="./deploy/llvm/bin"
+#     while IFS= read -r f
+#     do
+#         bin_file="${LLVM_BIN}/${f}${EXE_SUFFIX}"
+#         if [[ -f "$bin_file" ]] ; then
+#             ../scripts/sign.sh "$bin_file"
+#         fi
+#     done < <(cat <<EOF
+# lld
+# llc
+# llvm-symbolizer
+# llvm-objdump
+# lldb
+# llvm-ar
+# llvm-readobj
+# opt
+# llvm-objcopy
+# clang-17
+# solana-lldb
+# lldb-vscode
+# liblldb.17.0.6-rust-dev.dylib
+# EOF
+#         )
 
-    RUST_BIN="./deploy/rust/bin"
-    while IFS= read -r f
-    do
-        bin_file="${RUST_BIN}/${f}${EXE_SUFFIX}"
-        if [[ -f "$bin_file" ]] ; then
-            ../scripts/sign.sh "$bin_file"
-        fi
-    done < <(cat <<EOF
-rustdoc
-cargo
-rustc
-EOF
-        )
+#     RUST_BIN="./deploy/rust/bin"
+#     while IFS= read -r f
+#     do
+#         bin_file="${RUST_BIN}/${f}${EXE_SUFFIX}"
+#         if [[ -f "$bin_file" ]] ; then
+#             ../scripts/sign.sh "$bin_file"
+#         fi
+#     done < <(cat <<EOF
+# rustdoc
+# cargo
+# rustc
+# EOF
+#         )
 
-    RUST_LIB_BIN="$RUST_LIB/rustlib/$HOST_TRIPLE/bin"
-    while IFS= read -r f
-    do
-        bin_file="${RUST_BIN}/${f}${EXE_SUFFIX}"
-        if [[ -f "$bin_file" ]] ; then
-            ../scripts/sign.sh "$bin_file"
-        fi
-    done < <(cat <<EOF
-llvm-cov
-llc
-llvm-objdump
-llvm-as
-llvm-nm
-llvm-ar
-llvm-dis
-llvm-size
-llvm-readobj
-gcc-ld/ld.lld
-gcc-ld/wasm-ld
-gcc-ld/lld-link
-gcc-ld/ld64.lld
-opt
-llvm-profdata
-llvm-objcopy
-rust-lld
-EOF
-        )
+#     RUST_LIB_BIN="$RUST_LIB/rustlib/$HOST_TRIPLE/bin"
+#     while IFS= read -r f
+#     do
+#         bin_file="${RUST_BIN}/${f}${EXE_SUFFIX}"
+#         if [[ -f "$bin_file" ]] ; then
+#             ../scripts/sign.sh "$bin_file"
+#         fi
+#     done < <(cat <<EOF
+# llvm-cov
+# llc
+# llvm-objdump
+# llvm-as
+# llvm-nm
+# llvm-ar
+# llvm-dis
+# llvm-size
+# llvm-readobj
+# gcc-ld/ld.lld
+# gcc-ld/wasm-ld
+# gcc-ld/lld-link
+# gcc-ld/ld64.lld
+# opt
+# llvm-profdata
+# llvm-objcopy
+# rust-lld
+# EOF
+#         )
 
-    # sign all dylib libraries
-    RUST_LIB="./deploy/rust/lib"
-    RUST_LIB_LIB="$RUST_LIB/rustlib/$HOST_TRIPLE/lib"
-    ../scripts/sign.sh $RUST_LIB/*.dylib $RUST_LIB_LIB/*.dylib
-fi
+#     # sign all dylib libraries
+#     RUST_LIB="./deploy/rust/lib"
+#     RUST_LIB_LIB="$RUST_LIB/rustlib/$HOST_TRIPLE/lib"
+#     ../scripts/sign.sh $RUST_LIB/*.dylib $RUST_LIB_LIB/*.dylib
+# fi
 
 # Check the Rust binaries
 while IFS= read -r f
