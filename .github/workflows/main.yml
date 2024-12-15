@@ -10,8 +10,6 @@ on:
 jobs:
   build-mac-arm:
     runs-on: macos-latest
-    env:
-      TAG: ${{ github.ref_name }}
     steps:
       - uses: actions/checkout@v4
       - name: Install dependencies
@@ -42,8 +40,6 @@ jobs:
 
   build-mac-intel:
     runs-on: macos-13
-    env:
-      TAG: ${{ github.ref_name }}
     steps:
       - uses: actions/checkout@v4
       - name: Install dependencies
@@ -74,8 +70,6 @@ jobs:
 
   build-linux:
     runs-on: ubuntu-latest
-    env:
-      TAG: ${{ github.ref_name }}
     steps:
       - uses: actions/checkout@v4
       - name: Install just
@@ -101,25 +95,29 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     needs: [build-linux, build-mac-arm, build-mac-intel]
     if: startsWith(github.event.ref, 'refs/tags/') #  only on new tag creation
-    env:
-      TAG: ${{ github.ref_name }}
     steps:
       - uses: actions/checkout@v4
       - name: Download artifact
         uses: actions/download-artifact@v4
       - name: Create a release
         env:
+          TAG: ${{ github.ref_name }}
           GH_TOKEN: ${{ github.token }}
+          MACOS_ARM: platform-tools-osx-aarch64.tar.bz2
+          MACOS_INTEL: platform-tools-osx-x86_64.tar.bz2
+          LINUX: platform-tools-linux-x86_64.tar.bz2
         run: |
           release_exist=$(gh release view $TAG 2>&1 || exit 0)
           if [ "$release_exist" = "release not found" ]; then
-            gh release create $TAG certora-solana-platform-tools/platform-tools-osx-aarch64.tar.bz2 --title "Release $TAG" --generate-notes --latest
-            gh release upload $TAG certora-solana-platform-tools/platform-tools-osx-x86_64.tar.bz2
-            gh release upload $TAG certora-solana-platform-tools/platform-tools-linux-x86_64.tar.bz2
+            gh release create $TAG $MACOS_ARM/$MACOS_ARM --title "Release $TAG" --generate-notes --latest
+            gh release upload $TAG $MACOS_INTEL/$MACOS_INTEL
+            gh release upload $TAG $LINUX/$LINUX
           else
-            gh release upload $TAG certora-solana-platform-tools/platform-tools-osx-aarch64.tar.bz2
-            gh release upload $TAG certora-solana-platform-tools/platform-tools-osx-x86_64.tar.bz2
-            gh release upload $TAG certora-solana-platform-tools/platform-tools-linux-x86_64.tar.bz2
+            gh release upload $TAG $MACOS_ARM/$MACOS_ARM
+            gh release upload $TAG $MACOS_INTEL/$MACOS_INTEL
+            gh release upload $TAG $LINUX/$LINUX
           fi
