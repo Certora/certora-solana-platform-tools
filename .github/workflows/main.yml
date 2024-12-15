@@ -115,11 +115,11 @@ jobs:
         run: |
           release_exist=$(gh release view $TAG 2>&1 || exit 0)
           if [ "$release_exist" = "release not found" ]; then
-            gh release create $TAG platform-tools-osx-aarch64/platform-tools-osx-aarch64.tar.bz2 --title "Release $TAG" --generate-notes --latest
-            gh release upload $TAG platform-tools-osx-x86_64/platform-tools-osx-x86_64.tar.bz2
-            gh release upload $TAG platform-tools-linux-x86_64/platform-tools-linux-x86_64.tar.bz2
+            gh release create $TAG certora-solana-platform-tools/platform-tools-osx-aarch64.tar.bz2 --title "Release $TAG" --generate-notes --latest
+            gh release upload $TAG certora-solana-platform-tools/platform-tools-osx-x86_64.tar.bz2
+            gh release upload $TAG certora-solana-platform-tools/platform-tools-linux-x86_64.tar.bz2
           else
-            gh release upload $TAG platform-tools-osx-aarch64/platform-tools-osx-aarch64.tar.bz2
-            gh release upload $TAG platform-tools-osx-x86_64/platform-tools-osx-x86_64.tar.bz2
-            gh release upload $TAG platform-tools-linux-x86_64/platform-tools-linux-x86_64.tar.bz2
+            gh release upload $TAG certora-solana-platform-tools/platform-tools-osx-aarch64.tar.bz2
+            gh release upload $TAG certora-solana-platform-tools/platform-tools-osx-x86_64.tar.bz2
+            gh release upload $TAG certora-solana-platform-tools/platform-tools-linux-x86_64.tar.bz2
           fi
