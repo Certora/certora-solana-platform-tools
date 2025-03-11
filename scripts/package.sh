@@ -27,7 +27,7 @@ case "${unameOut}" in
         fi
 esac
 
-OUT_DIR=$(realpath "${1:-out}")
+OUT_DIR="$(realpath ./)/${1:-out}"
 
 pushd "${OUT_DIR}"
 
@@ -40,6 +40,10 @@ cp -R "cargo/target/release/cargo${EXE_SUFFIX}" deploy/rust/bin/
 mkdir -p deploy/rust/lib/rustlib/
 cp -R "rust/build/${HOST_TRIPLE}/stage1/lib/rustlib/${HOST_TRIPLE}" deploy/rust/lib/rustlib/
 cp -R "rust/build/${HOST_TRIPLE}/stage1/lib/rustlib/sbf-solana-solana" deploy/rust/lib/rustlib/
+cp -R "rust/build/${HOST_TRIPLE}/stage1/lib/rustlib/sbpf-solana-solana" deploy/rust/lib/rustlib/
+cp -R "rust/build/${HOST_TRIPLE}/stage1/lib/rustlib/sbpfv1-solana-solana" deploy/rust/lib/rustlib/
+cp -R "rust/build/${HOST_TRIPLE}/stage1/lib/rustlib/sbpfv2-solana-solana" deploy/rust/lib/rustlib/
+cp -R "rust/build/${HOST_TRIPLE}/stage1/lib/rustlib/sbpfv3-solana-solana" deploy/rust/lib/rustlib/
 find . -maxdepth 6 -type f -path "./rust/build/${HOST_TRIPLE}/stage1/lib/*" -exec cp {} deploy/rust/lib \;
 mkdir -p deploy/rust/lib/rustlib/src/rust
 cp "rust/build/${HOST_TRIPLE}/stage1/lib/rustlib/src/rust/Cargo.lock" deploy/rust/lib/rustlib/src/rust
@@ -58,7 +62,7 @@ clang
 clang++
 clang-cl
 clang-cpp
-clang-17
+clang-18
 ld.lld
 ld64.lld
 llc
@@ -82,7 +86,11 @@ if [[ "${HOST_TRIPLE}" != "x86_64-pc-windows-msvc" ]] ; then
     cp -R newlib_install/sbf-solana/include deploy/llvm/
     cp -R rust/src/llvm-project/lldb/scripts/solana/* deploy/llvm/bin/
     cp -R rust/build/${HOST_TRIPLE}/llvm/lib/liblldb.* deploy/llvm/lib/
-    #cp -R rust/build/${HOST_TRIPLE}/llvm/lib/python* deploy/llvm/lib/
+    # if [[ "${HOST_TRIPLE}" == "x86_64-unknown-linux-gnu" || "${HOST_TRIPLE}" == "aarch64-unknown-linux-gnu" ]]; then
+    #     cp -r rust/build/${HOST_TRIPLE}/llvm/local/lib/python* deploy/llvm/lib
+    # else
+    #     cp -R rust/build/${HOST_TRIPLE}/llvm/lib/python* deploy/llvm/lib/
+    # fi
 fi
 
 # Sign macOS binaries - Disabled
@@ -104,7 +112,7 @@ fi
 # llvm-readobj
 # opt
 # llvm-objcopy
-# clang-17
+# clang-18
 # solana-lldb
 # lldb-vscode
 # liblldb.17.0.6-rust-dev.dylib
