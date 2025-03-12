@@ -15,9 +15,9 @@ jobs:
       - name: Install dependencies
         run: |
             brew install just ninja
-            rustup install 1.75
-            rustup toolchain install 1.75
-            rustup default 1.75-aarch64-apple-darwin
+            rustup install 1.79
+            rustup toolchain install 1.79
+            rustup default 1.79-aarch64-apple-darwin
       - name: Clone
         run: just clone
       - name: Prepare
@@ -45,9 +45,9 @@ jobs:
       - name: Install dependencies
         run: |
             brew install just ninja
-            rustup install 1.75
-            rustup toolchain install 1.75
-            rustup default 1.75-x86_64-apple-darwin
+            rustup install 1.79
+            rustup toolchain install 1.79
+            rustup default 1.79-x86_64-apple-darwin
       - name: Clone
         run: just clone
       - name: Prepare
@@ -77,9 +77,9 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update; sudo apt install ninja-build
-          rustup install 1.75
-          rustup toolchain install 1.75
-          rustup default 1.75-x86_64-unknown-linux-gnu
+          rustup install 1.79
+          rustup toolchain install 1.79
+          rustup default 1.79-x86_64-unknown-linux-gnu
       - name: Clone
         run: just clone
       - name: Prepare
