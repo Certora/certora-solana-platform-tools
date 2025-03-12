@@ -47,7 +47,7 @@ build-newlib:
 build-newlib:
 	@echo "No need to build newlib on Windows"
 
-deploy_dir := env('HOME') / '.cache/solana/v1.41/platform-tools'
+deploy_dir := env('HOME') / '.cache/solana/v1.43/platform-tools'
 artifact_tar := out_dir / artifact
 
 package:
