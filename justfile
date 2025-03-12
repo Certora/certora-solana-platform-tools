@@ -18,7 +18,6 @@ configure:
 	./scripts/prepare.sh
 
 patch:
-	cd {{ out_dir }}/rust && git apply {{justfile_directory()}}/patches/01-rust-novector.patch
 	cd {{ out_dir }}/rust/src/llvm-project && git apply {{justfile_directory()}}/patches/02-llvm-sroa-novector.patch
 
 
