@@ -58,7 +58,7 @@ clang
 clang++
 clang-cl
 clang-cpp
-clang-17
+clang-18
 ld.lld
 ld64.lld
 llc
@@ -104,7 +104,7 @@ fi
 # llvm-readobj
 # opt
 # llvm-objcopy
-# clang-17
+# clang-18
 # solana-lldb
 # lldb-vscode
 # liblldb.17.0.6-rust-dev.dylib

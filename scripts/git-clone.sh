@@ -27,11 +27,10 @@ case "${unameOut}" in
         fi
 esac
 
-OUT_DIR=$(realpath "${1:-out}")
-
+OUT_DIR="$(realpath ./)/${1:-out}"
 pushd "${OUT_DIR}"
-git clone --single-branch --branch solana-tools-v1.41 --recurse-submodules --shallow-submodules https://github.com/anza-xyz/rust.git
-git clone --single-branch --branch solana-tools-v1.41 https://github.com/anza-xyz/cargo.git
-git clone --single-branch --branch solana-tools-v1.41 https://github.com/anza-xyz/newlib.git
+git clone --single-branch --branch solana-tools-v1.43 --recurse-submodules --shallow-submodules https://github.com/anza-xyz/rust.git
+git clone --single-branch --branch solana-tools-v1.43 https://github.com/anza-xyz/cargo.git
+git clone --single-branch --branch solana-tools-v1.43 https://github.com/anza-xyz/newlib.git
 
 popd
