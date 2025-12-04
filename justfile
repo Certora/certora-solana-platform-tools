@@ -29,19 +29,43 @@ build-cargo:
 	# AG: this fails for me with macport and libiconv
 	# AG: I have to disable libiconv, run this manually
 	# AG: and then re-enable it
-	cd {{ out_dir }}/cargo && env OPENSSL_STATIC=1 cargo +1.79 build --release
+	cd {{ out_dir }}/cargo && env OPENSSL_STATIC=1 cargo +1.84.1 build --release
 
 [linux]
 build-cargo:
-	cd {{ out_dir }}/cargo && env OPENSSL_STATIC=1 OPENSSL_LIB_DIR=/usr/lib/x86_64-linux-gnu OPENSSL_INCLUDE_DIR=/usr/include/openssl cargo +1.79 build --release
+	cd {{ out_dir }}/cargo && env OPENSSL_STATIC=1 OPENSSL_LIB_DIR=/usr/lib/x86_64-linux-gnu OPENSSL_INCLUDE_DIR=/usr/include/openssl cargo +1.84.1 build --release
 
 
 [linux,macos]
-build-newlib:
-	mkdir -p {{out_dir}}/newlib_build
-	mkdir -p {{out_dir}}/newlib_install
-	cd {{out_dir}}/newlib_build && env CC="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/clang" AR="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/llvm-ar" RANLIB="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/llvm-ranlib" ../newlib/newlib/configure --target=sbf-solana-solana --host=sbf-solana --build="{{host_triple}}" --prefix="{{ out_dir }}/newlib_install"
-	cd {{out_dir}}/newlib_build && make install
+build-newlib-v0:
+	mkdir -p {{out_dir}}/newlib_build_v0
+	mkdir -p {{out_dir}}/newlib_v0
+	cd {{out_dir}}/newlib_build_v0 && env CFLAGS="-mcpu=v0" CC="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/clang" AR="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/llvm-ar" RANLIB="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/llvm-ranlib" ../newlib/newlib/configure --target=sbf-solana-solana --host=sbf-solana --build="{{host_triple}}" --prefix="{{ out_dir }}/newlib_v0"
+	cd {{out_dir}}/newlib_build_v0 && make install
+
+[linux,macos]
+build-newlib-v1:
+	mkdir -p {{out_dir}}/newlib_build_v1
+	mkdir -p {{out_dir}}/newlib_v1
+	cd {{out_dir}}/newlib_build_v1 && env CFLAGS="-O2 -mcpu=v1" CC="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/clang" AR="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/llvm-ar" RANLIB="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/llvm-ranlib" ../newlib/newlib/configure --target=sbf-solana-solana --host=sbf-solana --build="{{host_triple}}" --prefix="{{ out_dir }}/newlib_v1"
+	cd {{out_dir}}/newlib_build_v1 && make install
+
+[linux,macos]
+build-newlib-v2:
+	mkdir -p {{out_dir}}/newlib_build_v2
+	mkdir -p {{out_dir}}/newlib_v2
+	cd {{out_dir}}/newlib_build_v2 && env CFLAGS="-O2 -mcpu=v2" CC="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/clang" AR="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/llvm-ar" RANLIB="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/llvm-ranlib" ../newlib/newlib/configure --target=sbf-solana-solana --host=sbf-solana --build="{{host_triple}}" --prefix="{{ out_dir }}/newlib_v2"
+	cd {{out_dir}}/newlib_build_v2 && make install
+
+[linux,macos]
+build-newlib-v1:
+	mkdir -p {{out_dir}}/newlib_build_v3
+	mkdir -p {{out_dir}}/newlib_v3
+	cd {{out_dir}}/newlib_build_v3 && env CFLAGS="-O2 -mcpu=v3" CC="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/clang" AR="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/llvm-ar" RANLIB="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/llvm-ranlib" ../newlib/newlib/configure --target=sbf-solana-solana --host=sbf-solana --build="{{host_triple}}" --prefix="{{ out_dir }}/newlib_v3"
+	cd {{out_dir}}/newlib_build_v3 && make install
+
+[linux,macos]
+build-newlib: build-newlib-v0 build-newlib-v1 build-newlib-v2 build-newlib-v3
 
 [windows]
 build-newlib:

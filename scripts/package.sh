@@ -1,6 +1,18 @@
 #!/usr/bin/env bash
 set -ex
 
+function copy_newlib() {
+    local folder_name=""
+    if [[ "$1" != "v0" ]] ; then
+        folder_name="$1"
+    fi
+
+    mkdir -p deploy/llvm/lib/sbpf"${folder_name}"
+    mkdir -p deploy/llvm/sbpf"${folder_name}"
+    cp -R newlib_"$1"/sbf-solana/lib/lib{c,m}.a deploy/llvm/lib/sbpf"${folder_name}"/
+    cp -R newlib_"$1"/sbf-solana/include deploy/llvm/sbpf"${folder_name}"/    
+}
+
 unameOut="$(uname -s)"
 case "${unameOut}" in
     Darwin*)
@@ -40,6 +52,11 @@ cp -R "cargo/target/release/cargo${EXE_SUFFIX}" deploy/rust/bin/
 mkdir -p deploy/rust/lib/rustlib/
 cp -R "rust/build/${HOST_TRIPLE}/stage1/lib/rustlib/${HOST_TRIPLE}" deploy/rust/lib/rustlib/
 cp -R "rust/build/${HOST_TRIPLE}/stage1/lib/rustlib/sbf-solana-solana" deploy/rust/lib/rustlib/
+cp -R "rust/build/${HOST_TRIPLE}/stage1/lib/rustlib/sbpf-solana-solana" deploy/rust/lib/rustlib/
+cp -R "rust/build/${HOST_TRIPLE}/stage1/lib/rustlib/sbpfv1-solana-solana" deploy/rust/lib/rustlib/
+cp -R "rust/build/${HOST_TRIPLE}/stage1/lib/rustlib/sbpfv2-solana-solana" deploy/rust/lib/rustlib/
+cp -R "rust/build/${HOST_TRIPLE}/stage1/lib/rustlib/sbpfv3-solana-solana" deploy/rust/lib/rustlib/
+cp -R "rust/build/${HOST_TRIPLE}/stage1/lib/rustlib/sbpfv4-solana-solana" deploy/rust/lib/rustlib/
 find . -maxdepth 6 -type f -path "./rust/build/${HOST_TRIPLE}/stage1/lib/*" -exec cp {} deploy/rust/lib \;
 mkdir -p deploy/rust/lib/rustlib/src/rust
 cp "rust/build/${HOST_TRIPLE}/stage1/lib/rustlib/src/rust/Cargo.lock" deploy/rust/lib/rustlib/src/rust
@@ -58,7 +75,7 @@ clang
 clang++
 clang-cl
 clang-cpp
-clang-18
+clang-19
 ld.lld
 ld64.lld
 llc
@@ -78,11 +95,21 @@ EOF
          )
 cp -R "rust/build/${HOST_TRIPLE}/llvm/build/lib/clang" deploy/llvm/lib/
 if [[ "${HOST_TRIPLE}" != "x86_64-pc-windows-msvc" ]] ; then
-    cp -R newlib_install/sbf-solana/lib/lib{c,m}.a deploy/llvm/lib/
-    cp -R newlib_install/sbf-solana/include deploy/llvm/
+    cp -R newlib_v0/sbf-solana/lib/lib{c,m}.a deploy/llvm/lib/
+    cp -R newlib_v0/sbf-solana/include deploy/llvm/
+    
+    copy_newlib "v0"
+    copy_newlib "v1"
+    copy_newlib "v2"
+    copy_newlib "v3"
+j
     cp -R rust/src/llvm-project/lldb/scripts/solana/* deploy/llvm/bin/
     cp -R rust/build/${HOST_TRIPLE}/llvm/lib/liblldb.* deploy/llvm/lib/
-    #cp -R rust/build/${HOST_TRIPLE}/llvm/lib/python* deploy/llvm/lib/
+    if [[ "${HOST_TRIPLE}" == "x86_64-unknown-linux-gnu" || "${HOST_TRIPLE}" == "aarch64-unknown-linux-gnu" ]]; then
+        cp -r rust/build/${HOST_TRIPLE}/llvm/local/lib/python* deploy/llvm/lib
+    else
+        cp -R rust/build/${HOST_TRIPLE}/llvm/lib/python* deploy/llvm/lib/
+    fi
 fi
 
 # Sign macOS binaries - Disabled
