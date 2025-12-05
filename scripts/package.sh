@@ -102,7 +102,7 @@ if [[ "${HOST_TRIPLE}" != "x86_64-pc-windows-msvc" ]] ; then
     copy_newlib "v1"
     copy_newlib "v2"
     copy_newlib "v3"
-j
+
     cp -R rust/src/llvm-project/lldb/scripts/solana/* deploy/llvm/bin/
     cp -R rust/build/${HOST_TRIPLE}/llvm/lib/liblldb.* deploy/llvm/lib/
     if [[ "${HOST_TRIPLE}" == "x86_64-unknown-linux-gnu" || "${HOST_TRIPLE}" == "aarch64-unknown-linux-gnu" ]]; then
