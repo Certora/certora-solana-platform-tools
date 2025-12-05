@@ -22,7 +22,7 @@ patch:
 
 
 build-rust:
-	cd {{ out_dir }}/rust && ./build.sh --llvm 
+	cd {{ out_dir }}/rust && env SDKROOT=$(xcrun --sdk macosx --show-sdk-path) ./build.sh --llvm 
 
 [macos,windows]
 build-cargo:
