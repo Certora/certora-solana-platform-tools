@@ -58,20 +58,28 @@ build-newlib-v2:
 	cd {{out_dir}}/newlib_build_v2 && make install
 
 [linux,macos]
-build-newlib-v1:
+build-newlib-v3:
 	mkdir -p {{out_dir}}/newlib_build_v3
 	mkdir -p {{out_dir}}/newlib_v3
 	cd {{out_dir}}/newlib_build_v3 && env CFLAGS="-O2 -mcpu=v3" CC="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/clang" AR="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/llvm-ar" RANLIB="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/llvm-ranlib" ../newlib/newlib/configure --target=sbf-solana-solana --host=sbf-solana --build="{{host_triple}}" --prefix="{{ out_dir }}/newlib_v3"
 	cd {{out_dir}}/newlib_build_v3 && make install
 
 [linux,macos]
-build-newlib: build-newlib-v0 build-newlib-v1 build-newlib-v2 build-newlib-v3
+build-newlib-v4:
+	mkdir -p {{out_dir}}/newlib_build_v4
+	mkdir -p {{out_dir}}/newlib_v4
+	cd {{out_dir}}/newlib_build_v4 && env CFLAGS="-O2 -mcpu=v4" CC="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/clang" AR="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/llvm-ar" RANLIB="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/llvm-ranlib" ../newlib/newlib/configure --target=sbf-solana-solana --host=sbf-solana --build="{{host_triple}}" --prefix="{{ out_dir }}/newlib_v4"
+	cd {{out_dir}}/newlib_build_v4 && make install
+
+
+[linux,macos]
+build-newlib: build-newlib-v0 build-newlib-v1 build-newlib-v2 build-newlib-v3 build-newlib-v4
 
 [windows]
 build-newlib:
 	@echo "No need to build newlib on Windows"
 
-deploy_dir := env('HOME') / '.cache/solana/v1.43/platform-tools'
+deploy_dir := env('HOME') / '.cache/solana/v1.51/certora-platform-tools'
 artifact_tar := out_dir / artifact
 
 package:
