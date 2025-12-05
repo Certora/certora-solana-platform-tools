@@ -1,3 +1,4 @@
 out
 scripts/kill_libiconv.sh
 scripts/live_libiconv.sh
+out-v*
