@@ -40,7 +40,7 @@ build-cargo:
 build-newlib-v0:
 	mkdir -p {{out_dir}}/newlib_build_v0
 	mkdir -p {{out_dir}}/newlib_v0
-	cd {{out_dir}}/newlib_build_v0 && env CFLAGS="-mcpu=v0" CC="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/clang" AR="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/llvm-ar" RANLIB="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/llvm-ranlib" ../newlib/newlib/configure --target=sbf-solana-solana --host=sbf-solana --build="{{host_triple}}" --prefix="{{ out_dir }}/newlib_v0"
+	cd {{out_dir}}/newlib_build_v0 && env CFLAGS="-O2" CC="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/clang" AR="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/llvm-ar" RANLIB="{{out_dir}}/rust/build/{{host_triple}}/llvm/bin/llvm-ranlib" ../newlib/newlib/configure --target=sbf-solana-solana --host=sbf-solana --build="{{host_triple}}" --prefix="{{ out_dir }}/newlib_v0"
 	cd {{out_dir}}/newlib_build_v0 && make install
 
 [linux,macos]
