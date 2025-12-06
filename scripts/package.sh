@@ -74,7 +74,7 @@ clang
 clang++
 clang-cl
 clang-cpp
-clang-19
+clang-18
 ld.lld
 ld64.lld
 llc

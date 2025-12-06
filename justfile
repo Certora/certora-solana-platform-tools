@@ -71,7 +71,7 @@ build-newlib: build-newlib-v0 build-newlib-v1 build-newlib-v2 build-newlib-v3
 build-newlib:
 	@echo "No need to build newlib on Windows"
 
-deploy_dir := env('HOME') / '.cache/solana/v1.48/certora-platform-tools'
+deploy_dir := env('HOME') / '.cache/solana/v1.46/platform-tools-certora'
 artifact_tar := out_dir / artifact
 
 package:
