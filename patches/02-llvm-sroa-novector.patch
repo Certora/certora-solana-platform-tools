@@ -1,11 +1,12 @@
 diff --git a/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp b/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
-index 5038f8a1f..fe9d45a82 100644
+index e921ced83..d79182061 100644
 --- a/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
 +++ b/llvm/lib/CodeGen/SelectionDAG/DAGCombiner.cpp
-@@ -146,6 +146,12 @@ static cl::opt<bool> EnableVectorFCopySignExtendRound(
+@@ -153,6 +153,13 @@ static cl::opt<bool> EnableVectorFCopySignExtendRound(
+     "combiner-vector-fcopysign-extend-round", cl::Hidden, cl::init(false),
      cl::desc(
          "Enable merging extends and rounds into FCOPYSIGN on vector types"));
- 
++
 +static cl::opt<bool> EnableLoadCombine(
 +    "combiner-load-merging", cl::Hidden, cl::init(true),
 +    cl::desc("DAG combine enable merging multiple loads "
@@ -15,7 +16,7 @@ index 5038f8a1f..fe9d45a82 100644
  namespace {
  
    class DAGCombiner {
-@@ -8874,6 +8880,9 @@ static SDValue stripTruncAndExt(SDValue Value) {
+@@ -9053,6 +9060,9 @@ static SDValue stripTruncAndExt(SDValue Value) {
  /// =>
  ///  *((i32)p) = BSWAP(val);
  SDValue DAGCombiner::mergeTruncStores(StoreSDNode *N) {
@@ -25,7 +26,7 @@ index 5038f8a1f..fe9d45a82 100644
    // The matching looks for "store (trunc x)" patterns that appear early but are
    // likely to be replaced by truncating store nodes during combining.
    // TODO: If there is evidence that running this later would help, this
-@@ -9092,6 +9101,9 @@ SDValue DAGCombiner::MatchLoadCombine(SDNode *N) {
+@@ -9277,6 +9287,9 @@ SDValue DAGCombiner::MatchLoadCombine(SDNode *N) {
    assert(N->getOpcode() == ISD::OR &&
           "Can only match load combining against OR nodes");
  
@@ -36,10 +37,10 @@ index 5038f8a1f..fe9d45a82 100644
    EVT VT = N->getValueType(0);
    if (VT != MVT::i16 && VT != MVT::i32 && VT != MVT::i64)
 diff --git a/llvm/lib/Transforms/Scalar/SROA.cpp b/llvm/lib/Transforms/Scalar/SROA.cpp
-index 17a94f938..623a22913 100644
+index e88c130cc..983a7e2b1 100644
 --- a/llvm/lib/Transforms/Scalar/SROA.cpp
 +++ b/llvm/lib/Transforms/Scalar/SROA.cpp
-@@ -123,6 +123,10 @@ static cl::opt<bool> SROAStrictInbounds("sroa-strict-inbounds", cl::init(false),
+@@ -120,6 +120,10 @@ STATISTIC(NumVectorized, "Number of vectorized aggregates");
  /// Disable running mem2reg during SROA in order to test or debug SROA.
  static cl::opt<bool> SROASkipMem2Reg("sroa-skip-mem2reg", cl::init(false),
                                       cl::Hidden);
@@ -50,7 +51,7 @@ index 17a94f938..623a22913 100644
  namespace {
  
  class AllocaSliceRewriter;
-@@ -1232,6 +1236,11 @@ private:
+@@ -1190,6 +1194,11 @@ private:
      if (!IsOffsetKnown)
        return PI.setAborted(&II);
  

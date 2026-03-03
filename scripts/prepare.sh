@@ -46,4 +46,9 @@ if [[ "${HOST_TRIPLE}" != "x86_64-pc-windows-msvc" ]] ; then
     echo "$( cd newlib && git rev-parse HEAD )  https://github.com/anza-xyz/newlib.git" >> version.md
 fi
 
+
+if [[ "${HOST_TRIPLE}" == *"apple"* ]]; then
+    ( cd rust  && ./src/llvm-project/lldb/scripts/macos-setup-codesign.sh )
+fi
+
 popd

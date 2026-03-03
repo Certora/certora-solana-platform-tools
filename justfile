@@ -29,11 +29,11 @@ build-cargo:
 	# AG: this fails for me with macport and libiconv
 	# AG: I have to disable libiconv, run this manually
 	# AG: and then re-enable it
-	cd {{ out_dir }}/cargo && env OPENSSL_STATIC=1 cargo +1.84.1 build --release
+	cd {{ out_dir }}/cargo && env OPENSSL_STATIC=1 cargo +1.89.0 build --release
 
 [linux]
 build-cargo:
-	cd {{ out_dir }}/cargo && env OPENSSL_STATIC=1 OPENSSL_LIB_DIR=/usr/lib/x86_64-linux-gnu OPENSSL_INCLUDE_DIR=/usr/include/openssl cargo +1.84.1 build --release
+	cd {{ out_dir }}/cargo && env OPENSSL_STATIC=1 OPENSSL_LIB_DIR=/usr/lib/x86_64-linux-gnu OPENSSL_INCLUDE_DIR=/usr/include/openssl cargo +1.89.0 build --release
 
 
 [linux,macos]
@@ -79,7 +79,7 @@ build-newlib: build-newlib-v0 build-newlib-v1 build-newlib-v2 build-newlib-v3 bu
 build-newlib:
 	@echo "No need to build newlib on Windows"
 
-deploy_dir := env('HOME') / '.cache/solana/v1.51/certora-platform-tools'
+deploy_dir := env('HOME') / '.cache/solana/v1.53/certora-platform-tools'
 artifact_tar := out_dir / artifact
 
 package:
