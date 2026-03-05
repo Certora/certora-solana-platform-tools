@@ -36,7 +36,7 @@ index 235f0da86..13461ffd0 100644
    EVT VT = N->getValueType(0);
    if (VT != MVT::i16 && VT != MVT::i32 && VT != MVT::i64)
 diff --git a/llvm/lib/Transforms/Scalar/SROA.cpp b/llvm/lib/Transforms/Scalar/SROA.cpp
-index 983a75e1d..0e5cff400 100644
+index 983a75e1d..a280616ca 100644
 --- a/llvm/lib/Transforms/Scalar/SROA.cpp
 +++ b/llvm/lib/Transforms/Scalar/SROA.cpp
 @@ -121,6 +121,10 @@ static cl::opt<bool> SROAStrictInbounds("sroa-strict-inbounds", cl::init(false),
@@ -72,3 +72,29 @@ index 983a75e1d..0e5cff400 100644
      Type *Ty;
      if (auto *LI = dyn_cast<LoadInst>(S.getUse()->getUser()))
        Ty = LI->getType();
+@@ -4707,6 +4719,15 @@ AllocaInst *SROAPass::rewritePartition(AllocaInst &AI, AllocaSlices &AS,
+   return NewAI;
+ }
+ 
++/// Return true if \p AS has any overlapping slices. \p AS must be sorted by
++/// begin offset; overlap is detected by adjacent pairs.
++static bool hasOverlappingSlices(AllocaSlices &AS) {
++  for (auto I = AS.begin(), E = AS.end(); I != E && std::next(I) != E; ++I)
++    if (I->endOffset() > std::next(I)->beginOffset())
++      return true;
++  return false;
++}
++
+ /// Walks the slices of an alloca and form partitions based on them,
+ /// rewriting each of their uses.
+ bool SROAPass::splitAlloca(AllocaInst &AI, AllocaSlices &AS) {
+@@ -4776,6 +4797,9 @@ bool SROAPass::splitAlloca(AllocaInst &AI, AllocaSlices &AS) {
+   if (!IsSorted)
+     llvm::sort(AS);
+ 
++  if (hasOverlappingSlices(AS))
++    return Changed;
++
+   /// Describes the allocas introduced by rewritePartition in order to migrate
+   /// the debug info.
+   struct Fragment {
