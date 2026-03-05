@@ -39,7 +39,7 @@ jobs:
           path: out/platform-tools-osx-aarch64.tar.bz2
 
   build-mac-intel:
-    runs-on: macos-13
+    runs-on: macos-15-intel
     steps:
       - uses: actions/checkout@v4
       - name: Install dependencies
