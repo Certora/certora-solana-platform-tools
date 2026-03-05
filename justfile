@@ -20,7 +20,11 @@ configure:
 patch:
 	cd {{ out_dir }}/rust/src/llvm-project && git apply {{justfile_directory()}}/patches/02-llvm-sroa-novector.patch
 
+[macos]
+build-rust:
+	cd {{ out_dir }}/rust && env SDKROOT="$(xcrun --sdk macosx --show-sdk-path)" ./build.sh --llvm 
 
+[windows,linux]
 build-rust:
 	cd {{ out_dir }}/rust && ./build.sh --llvm 
 
